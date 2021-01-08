@@ -1,22 +1,22 @@
-name: SevenSegment
+name: Nissin
 save_dir: saved/
 seed: 1234
 target_devices: [0]
 n_gpu: 1
 
 arch:
-  type: SevenSegmentModel
+  type: NissinModel
   args: {}
 
 augmentation:
-  type: SevenSegmentTransforms2
+  type: NissinTransforms
   args: {}
 
 data_loader:
-  type: SevenSegmentDataLoader
+  type: NissinDataLoader
   args:
-    batch_size: 16
-    data_dir: data/7segment/Datasets_test/
+    batch_size: 32
+    data_dir: data/nissin/
     nworkers: 2
     shuffle: true
     validation_split: 0.1
@@ -36,7 +36,7 @@ metrics:
 optimizer:
   type: Adam
   args:
-    lr: 0.001
+    lr: 0.0001
     weight_decay: 0
 
 training:

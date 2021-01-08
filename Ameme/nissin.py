@@ -2,28 +2,34 @@ import os
 import random
 from typing import Any, List, Tuple, Dict
 from types import ModuleType
+import torchvision.transforms as T
 
 import numpy as np
 import torch
 import torch.nn as nn
 import torch.optim as module_optimizer
 import torch.optim.lr_scheduler as module_scheduler
-
+from PIL import Image
+import cv2
 import Ameme.data_loader.augmentation as module_aug
 import Ameme.data_loader.data_loaders as module_data
 import Ameme.model.loss as module_loss
 import Ameme.model.metric as module_metric
 import Ameme.model.model as module_arch
 from Ameme.trainer import Trainer
-from Ameme.utils import setup_logger
+from Ameme.utils import setup_logger, setup_logging, utils
 import yaml
+
+from torchvision.datasets import ImageFolder
+from Ameme.utils.CharacterExtraction import CharacterExtraction
 
 log = setup_logger(__name__)
 
 
 def train(cfg: Dict, resume: str) -> None:
+    setup_logging(cfg)
     log.debug(f'Training: {cfg}')
-    seed_everything(cfg['seed'])
+    _seed_everything(cfg['seed'])
 
     model = get_instance(module_arch, 'arch', cfg)
     model, device = setup_device(model, cfg['target_devices'])
@@ -53,6 +59,78 @@ def train(cfg: Dict, resume: str) -> None:
 
     trainer.train()
     log.info('Finished!')
+
+
+def predict(cfg, model_checkpoint, dir_path):
+    setup_logging(cfg)
+    _seed_everything(config['seed'])
+
+    log.info(f'Using config:\n{config}')
+
+    log.debug('Building model architecture')
+    model = get_instance(module_arch, 'arch', cfg)
+    model, device = _prepare_device(model, cfg['n_gpu'])
+
+    log.debug(f'Loading checkpoint {model_checkpoint}')
+    checkpoint = torch.load(model_checkpoint)
+    state_dict = checkpoint['state_dict']
+    model.load_state_dict(state_dict)
+    transforms = T.Compose([T.Resize((60, 100)),
+                            T.ToTensor(),
+                            T.Normalize(mean=[0.485, 0.456, 0.406],
+                                        std=[0.229, 0.224, 0.225])])
+
+    # prepare model for testing
+    model.eval()
+
+    dataset = ImageFolder("D:/Ameme/Ameme/data/nissin")
+    dic = dataset.class_to_idx
+    inverse_dic = {}
+    for key, val in dic.items():
+        inverse_dic[val] = key
+
+    with torch.no_grad():
+        dir = os.listdir(dir_path)
+        for i in range(len(dir)):
+            image = cv2.imread("D:/Ameme/data/" + dir[i])
+            # Initialize & read image file
+            ce = CharacterExtraction("D:/Ameme/data/" + dir[i])
+
+            # Convert to grayscale image
+            ce.convert_to_grayscale()
+
+            # Extract area in vertical direction
+            cb0, cb1 = ce.extract_character_bands()
+
+            # Calculate shading
+            ce.calculate_shading(cb0[1], cb1[0])
+
+            # Extract characters
+            coords0 = ce.extract_characters(cb0, 10)  # 10 is dot size of upper character area
+            coords1 = ce.extract_characters(cb1, 8)  # 8 is dot size of lower character area
+
+            rois, coords = ce.get_roi(coords0 + coords1)
+
+            for j, img in enumerate(rois):
+                pil_img = img
+                data = transforms(pil_img)
+                data = data.unsqueeze(0).to(device)
+                output = model(data)
+                output = output.detach().cpu()
+                pred = torch.max(output, 1)[1].numpy()
+                label = inverse_dic[pred[0]]
+                if label == "colon":
+                    label = ":"
+                elif label == "plus":
+                    label = "+"
+                elif label == "dot":
+                    label = "."
+                image = cv2.rectangle(image, (coords[j][0], coords[j][1]), (coords[j][2], coords[j][3]), color=(255, 0, 0), thickness=2)
+                image = cv2.putText(image, label, (coords[j][0], coords[j][1]), fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=3, color=(0, 255, 0))
+
+            cv2.imwrite("D:/Ameme/data/" + "result_" + dir[i], image)
+
+    log.info('Finished saving predictions!')
 
 
 def setup_device(
@@ -147,7 +225,7 @@ def get_instance(
     return getattr(module, ctor_name)(*args, **config[name]['args'])
 
 
-def seed_everything(seed: int) -> None:
+def _seed_everything(seed: int) -> None:
     random.seed(seed)
     os.environ['PYTHONHASHSEED'] = str(seed)
     np.random.seed(seed)
@@ -155,7 +233,35 @@ def seed_everything(seed: int) -> None:
     torch.cuda.manual_seed(seed)
 
 
+def _prepare_device(model, n_gpu_use):
+    device, device_ids = _get_device(n_gpu_use)
+    model = model.to(device)
+    if len(device_ids) > 1:
+        model = torch.nn.DataParallel(model, device_ids=device_ids)
+    return model, device
+
+
+def _get_device(n_gpu_use):
+    """
+    setup GPU device if available, move model into configured device
+    """
+    n_gpu = torch.cuda.device_count()
+    if n_gpu_use > 0 and n_gpu == 0:
+        log.warning("Warning: There\'s no GPU available on this machine,"
+                    "training will be performed on CPU.")
+        n_gpu_use = 0
+    if n_gpu_use > n_gpu:
+        log.warning(f"Warning: The number of GPU\'s configured to use is {n_gpu_use}, "
+                    f"but only {n_gpu} are available on this machine.")
+        n_gpu_use = n_gpu
+    device = torch.device('cuda:0' if n_gpu_use > 0 else 'cpu')
+    list_ids = list(range(n_gpu_use))
+    log.info(f'Using device: {device}, {list_ids}')
+    return device, list_ids
+
+
 if __name__ == "__main__":
-    with open("D:/Ameme/experiments/config.yml") as fh:
+    with open("D:/Ameme/experiments/config_nissin.yml") as fh:
         config = yaml.safe_load(fh)
-    train(config, None)
+    # train(config, None)
+    predict(config, "D:/Ameme/Ameme/saved/Nissin/0105-131717/checkpoints/model_best.pth", "D:/Ameme/data")

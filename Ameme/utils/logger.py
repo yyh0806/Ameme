@@ -6,10 +6,10 @@ from pathlib import Path
 from .saving import log_path
 
 
-LOG_LEVEL = logging.DEBUG
+LOG_LEVEL = logging.INFO
 
 
-def setup_logging(run_config, log_config="logging.yml") -> None:
+def setup_logging(run_config, log_config="../logging.yml") -> None:
     """
     Setup ``logging.config``
 
