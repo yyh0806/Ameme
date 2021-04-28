@@ -25,15 +25,13 @@ class TrainerBase:
         self.start_epoch = 1
         self.save_dir = ensure_dir(save_dir)
         self.save_period = 1
-        self.st_stop = st_stop
+
         if checkpoint is not None:
             self._resume_checkpoint(checkpoint)
 
     def train(self):
         self.logger.info('Starting training...')
         for epoch in range(self.start_epoch, self.epochs + 1):
-            if self.st_stop:
-                break
             result = self._train_epoch(epoch)
             log = {'epoch': epoch}
             log.update(result)
@@ -66,6 +64,7 @@ class TrainerBase:
         """
         raise NotImplementedError
 
+    @abstractmethod
     def _calculate_loss(self, data, target):
         raise NotImplementedError(
             "calculate_loss should be implemented by subclass!")

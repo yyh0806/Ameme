@@ -1,14 +1,10 @@
-import argparse
-import collections
-import torch
-import logging
 from trainer import Trainer
-from data_loader.data_loaders import *
-from model.models import *
-from loss import *
+from model import *
 from optimizer.optimizers import *
 from scheduler.schedulers import *
 from model.metric import *
+from data_loader import *
+import logging
 from logger.logger import setup_logging
 from utils import prepare_device, seed_everything
 from config import cfg
@@ -23,7 +19,7 @@ def train(config) -> None:
     data_loader = eval(config["DATA_LOADER"]["TYPE"])(**config["DATA_LOADER"]["ARGS"])
     valid_data_loader = data_loader.split_validation()
     # build model architecture, then print to console
-    model = create_model((config["MODEL"]["TYPE"]))(**config["MODEL"]["ARGS"])
+    model = eval((config["MODEL"]["TYPE"]))(**config["MODEL"]["ARGS"])
     logger.info(model)
 
     # prepare for (multi-device) GPU training
@@ -50,7 +46,7 @@ def train(config) -> None:
 
 
 if __name__ == "__main__":
-    cfg.merge_from_file("experiments/config.yml")
+    cfg.merge_from_file("experiments/test_config.yml")
     cfg.freeze()
 
     train(cfg)

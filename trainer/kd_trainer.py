@@ -2,7 +2,7 @@ import numpy as np
 import torch
 import torch.nn as nn
 from torchvision.utils import make_grid
-from utils import inf_loop, MetricTracker, mixup_data, mix_criterion, VisdomLinePlotter, cutmix_data
+from utils import inf_loop, MetricTracker, mixup_data, mix_criterion,  cutmix_data
 from base import TrainerBase
 from logger.logger import setup_logging
 from visdom import Visdom

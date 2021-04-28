@@ -9,7 +9,7 @@ mixup:
   alpha: 1
 
 arch:
-  type: EfficientB4Model
+  type: Efficient_b4
   args:
     num_classes: 5
 
