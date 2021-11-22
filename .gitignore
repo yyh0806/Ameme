@@ -138,7 +138,6 @@ dmypy.json
 cython_debug/
 data/
 .idea/
-experiments/
 saved/
 pretrained/
 test/
