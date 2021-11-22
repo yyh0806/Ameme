@@ -1,6 +1,7 @@
 import sys
 import torch
-from base import TrainerBase
+from ame.base.base_train import TrainerBase
+from ame.utils import format_logs
 from tqdm import tqdm
 
 
@@ -27,7 +28,7 @@ class Trainer(TrainerBase):
                 for met in self.metrics:
                     self.train_metrics.update(met.__name__, met(output, target))
 
-                s = self._format_logs(self.train_metrics.result())
+                s = format_logs(self.train_metrics.result())
                 iterator.set_postfix_str(s)
 
             if self.lr_scheduler is not None:
@@ -52,8 +53,3 @@ class Trainer(TrainerBase):
 
     def _calculate_loss(self, data, target):
         return self.criterion(data, target)
-
-    def _format_logs(self, logs):
-        str_logs = ['{} - {:.4}'.format(k, v) for k, v in logs.items()]
-        s = ', '.join(str_logs)
-        return s

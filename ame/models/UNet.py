@@ -6,10 +6,10 @@ class DoubleConv(nn.Module):
     def __init__(self, in_ch, out_ch):
         super(DoubleConv, self).__init__()
         self.conv = nn.Sequential(
-            nn.Conv2d(in_ch, out_ch, kernel_size=3, stride=1, padding=1),
+            nn.Conv2d(in_ch, out_ch, kernel_size=(3, 3), stride=(1, 1), padding=1),
             nn.BatchNorm2d(out_ch),
             nn.ReLU(inplace=True),
-            nn.Conv2d(out_ch, out_ch, kernel_size=3, stride=1, padding=1),
+            nn.Conv2d(out_ch, out_ch, kernel_size=(3, 3), stride=(1, 1), padding=1),
             nn.BatchNorm2d(out_ch),
             nn.ReLU(inplace=True)
         )
@@ -45,7 +45,7 @@ class Down(nn.Module):
 class Up(nn.Module):
     def __init__(self, in_ch, out_ch):
         super(Up, self).__init__()
-        self.up = nn.ConvTranspose2d(in_ch // 2, in_ch // 2, kernel_size=2, stride=2)
+        self.up = nn.ConvTranspose2d(in_ch // 2, in_ch // 2, kernel_size=(2, 2), stride=(2, 2))
         self.conv = DoubleConv(in_ch, out_ch)
 
     def forward(self, x1, x2):
