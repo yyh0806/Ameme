@@ -49,6 +49,10 @@ class Trainer(TrainerBase):
                     self.valid_metrics.update('loss', loss.item())
                     for met in self.metrics:
                         self.valid_metrics.update(met.__name__, met(output, target))
+
+                    s = format_logs(self.valid_metrics.result())
+                    iterator.set_postfix_str(s)
+
                 return self.valid_metrics.result()
 
     def _calculate_loss(self, data, target):

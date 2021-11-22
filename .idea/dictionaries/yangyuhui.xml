@@ -5,9 +5,13 @@
       <w>dataloader</w>
       <w>datapath</w>
       <w>efficientnet</w>
+      <w>ious</w>
       <w>logprobs</w>
       <w>nfold</w>
       <w>optim</w>
+      <w>prec</w>
+      <w>pred</w>
+      <w>preds</w>
       <w>pretrained</w>
       <w>processbar</w>
       <w>ranzcr</w>
