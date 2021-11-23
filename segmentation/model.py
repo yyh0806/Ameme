@@ -21,10 +21,9 @@ class SegModel(SegmentationModel):
 
         self.segmentation_head = segmentation_head
 
-        if self.classification_head is not None:
+        if classification_head is not None:
             self.classification_head = classification_head
         else:
             self.classification_head = None
 
-        self.name = "{}{}".format(encoder.__name__, decoder.__name__)
         self.initialize()

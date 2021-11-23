@@ -4,6 +4,8 @@ import torch.nn.functional as F
 
 from ..base import modules as md
 
+from loguru import logger
+
 
 class DecoderBlock(nn.Module):
     def __init__(
@@ -107,7 +109,7 @@ class UnetDecoder(nn.Module):
 
     def forward(self, *features):
 
-        features = features[1:]    # remove first skip with same spatial resolution
+        features = features[1:]  # remove first skip with same spatial resolution
         features = features[::-1]  # reverse channels to start from head of encoder
 
         head = features[0]
@@ -117,5 +119,4 @@ class UnetDecoder(nn.Module):
         for i, decoder_block in enumerate(self.blocks):
             skip = skips[i] if i < len(skips) else None
             x = decoder_block(x, skip)
-
         return x

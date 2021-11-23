@@ -4,6 +4,8 @@ from torchvision.models.resnet import ResNet
 
 from ._base import EncoderMixin
 
+from loguru import logger
+
 
 class ResNetEncoder(ResNet, EncoderMixin):
     def __init__(self, out_channels, depth=5, **kwargs):
@@ -39,4 +41,5 @@ class ResNetEncoder(ResNet, EncoderMixin):
         state_dict.pop("fc.bias", None)
         state_dict.pop("fc.weight", None)
         super().load_state_dict(state_dict, **kwargs)
+
 
