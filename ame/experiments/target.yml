@@ -1,0 +1,46 @@
+NAME: Cell
+EPOCH: 80
+DATALOADER:
+  TYPE: "CellDataLoader"
+  ARGS:
+    data_path: "/media/yangyuhui/DATA/sartorius/sartorius-cell-instance-segmentation"
+    batch_size: 2
+    validation_split: 0.075
+    num_workers: 0
+
+MODEL:
+  TYPE: "segmentation"
+  ARGS:
+    Encoder:
+      name: "ResNetEncoder"
+      params:
+        depth: 5
+        out_channels: (3, 64, 64, 128, 256, 512)
+        block: "BasicBlock"
+        layers: [3, 4, 6, 3]
+    Decoder:
+      name: "UnetDecoder"
+      params:
+        encoder_channels: 3
+        decoder_channels: (256, 128, 64, 32, 16)
+    Segmentation_head:
+      in_channels: 3
+      out_channels: 1
+    Classification_head:
+      in_channels: 3
+      classes: 3
+
+OPTIMIZER:
+  TYPE: "Adam"
+  ARGS:
+    lr: 0.0005
+
+SCHEDULER:
+  TYPE: "CosineAnnealingLR"
+  ARGS:
+    T_max: 20
+
+LOSS: "BCELoss()"
+
+METRICS:
+  - "IOU_score"

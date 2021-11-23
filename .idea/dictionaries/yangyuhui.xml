@@ -2,11 +2,13 @@
   <dictionary name="yangyuhui">
     <words>
       <w>ameme</w>
+      <w>batchnorm</w>
       <w>dataloader</w>
       <w>datapath</w>
       <w>efficientnet</w>
       <w>ious</w>
       <w>logprobs</w>
+      <w>maskimg</w>
       <w>nfold</w>
       <w>optim</w>
       <w>prec</w>
@@ -14,9 +16,14 @@
       <w>preds</w>
       <w>pretrained</w>
       <w>processbar</w>
+      <w>pythonhashseed</w>
       <w>ranzcr</w>
       <w>resnet</w>
       <w>scaler</w>
+      <w>scse</w>
+      <w>segmetation</w>
+      <w>unet</w>
+      <w>upsampling</w>
       <w>visdom</w>
       <w>xfold</w>
       <w>yangyuhui</w>

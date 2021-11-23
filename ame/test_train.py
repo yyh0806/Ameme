@@ -7,7 +7,8 @@ from torch.nn import *
 
 from ame.utils import *
 from ame.dataset.dataloaders import *
-from ame.models.UNet import *
+
+
 from config import *
 
 if __name__ == "__main__":
@@ -21,7 +22,27 @@ if __name__ == "__main__":
     dataloader = eval(cfg["DATALOADER"]["TYPE"])(**cfg["DATALOADER"]["ARGS"])
     valid_dataloader = dataloader.split_validation()
     # build model architecture
-    model = eval(cfg["MODEL"]["TYPE"])(**cfg["MODEL"]["ARGS"])
+    model = None
+    # --------------------------------- segmentation ---------------------------------
+    encoder = None
+    decoder = None
+    segmentation_head = None
+    classification_head = None
+    if cfg["MODEL"]["TYPE"] == "segmentation":
+        from segmentation.encoders import Encoder
+        from segmentation.decoders import Decoder
+        from segmentation.model import SegModel
+        from segmentation.base import SegmentationHead, ClassificationHead
+        encoder = Encoder(**cfg["MODEL"]["ARGS"]["Encoder"])
+        decoder = Decoder(**cfg["MODEL"]["ARGS"]["Decoder"])
+        segmentation_head = SegmentationHead(**cfg["MODEL"]["ARGS"]["Segmentation_head"])
+        if "Classification_head" in cfg["MODEL"]["ARGS"]:
+            classification_head = ClassificationHead(**cfg["MODEL"]["ARGS"]["Classification_head"])
+        assert encoder is not None
+        assert decoder is not None
+        assert segmentation_head is not None
+        model = SegModel(encoder, decoder, segmentation_head, classification_head)
+    # --------------------------------------------------------------------------------
     logger.info(model)
     # prepare for (multi-device) GPU training
     device, device_ids = prepare_device(cfg['N_GPU'])
@@ -36,5 +57,5 @@ if __name__ == "__main__":
     metrics = [eval(met) for met in cfg["METRICS"]]
     logger.info("train")
     trainer = Trainer(model, criterion, metrics, optimizer, cfg["EPOCH"],
-                      device, dataloader, valid_dataloader, scheduler)
+                      device, dataloader, valid_dataloader, scheduler, save_dir=cfg["SAVE_DIR"])
     trainer.train()
