@@ -3,7 +3,7 @@ from yacs.config import CfgNode as CN
 _C = CN(new_allowed=True)
 _C.NAME = "Ameme"
 _C.EPOCH = 20
-_C.SAVE_DIR = "saved/"
+_C.SAVE_DIR = "./saved/"
 _C.SEED = 8060
 _C.N_GPU = 1
 _C.RESUME = None
@@ -26,7 +26,7 @@ _C.SCHEDULER.ARGS = CN(new_allowed=True)
 
 _C.LOSS = ""
 
-_C.METRICS = ["top_1_acc"]
+_C.METRICS = []
 
 
 def get_cfg_defaults():
