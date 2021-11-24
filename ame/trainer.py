@@ -31,9 +31,6 @@ class Trainer(TrainerBase):
                 s = format_logs(self.train_metrics.result())
                 iterator.set_postfix_str(s)
 
-            if self.lr_scheduler is not None:
-                self.lr_scheduler.step()
-
             return self.train_metrics.result()
 
     def _valid_epoch(self, epoch: int) -> dict:

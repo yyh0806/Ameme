@@ -39,9 +39,9 @@ OPTIMIZER:
     lr: 0.0005
 
 SCHEDULER:
-  TYPE: "CosineAnnealingLR"
+  TYPE: "ReduceLROnPlateau"
   ARGS:
-    T_max: 20
+    patience: 5
 
 LOSS: "BCELoss()"
 

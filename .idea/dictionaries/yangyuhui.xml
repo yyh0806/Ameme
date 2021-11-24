@@ -22,6 +22,7 @@
       <w>scaler</w>
       <w>scse</w>
       <w>segmetation</w>
+      <w>thres</w>
       <w>unet</w>
       <w>upsampling</w>
       <w>visdom</w>

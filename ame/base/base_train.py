@@ -41,6 +41,8 @@ class TrainerBase:
             if self.valid_data_loader:
                 valid_result = self._valid_epoch(epoch)
                 log.update(valid_result)
+            if self.lr_scheduler is not None:
+                self.lr_scheduler.step(valid_result['loss'])
 
     @abstractmethod
     def _train_epoch(self, epoch: int) -> dict:
