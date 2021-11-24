@@ -43,6 +43,7 @@ class TrainerBase:
                 log.update(valid_result)
             if self.lr_scheduler is not None:
                 self.lr_scheduler.step(valid_result['loss'])
+            self._save_checkpoint(epoch)
 
     @abstractmethod
     def _train_epoch(self, epoch: int) -> dict:
