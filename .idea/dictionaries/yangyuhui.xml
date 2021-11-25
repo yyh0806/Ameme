@@ -5,6 +5,7 @@
       <w>batchnorm</w>
       <w>dataloader</w>
       <w>datapath</w>
+      <w>dirname</w>
       <w>efficientnet</w>
       <w>ious</w>
       <w>logprobs</w>

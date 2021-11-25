@@ -8,10 +8,6 @@ _C.SEED = 8060
 _C.N_GPU = 1
 _C.RESUME = None
 
-_C.DATA_LOADER = CN(new_allowed=True)
-_C.DATA_LOADER.TYPE = ""
-_C.DATA_LOADER.ARGS = CN(new_allowed=True)
-
 _C.MODEL = CN(new_allowed=True)
 _C.MODEL.TYPE = ""
 _C.MODEL.ARGS = CN(new_allowed=True)

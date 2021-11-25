@@ -43,7 +43,6 @@ if __name__ == "__main__":
         assert segmentation_head is not None
         model = SegModel(encoder, decoder, segmentation_head, classification_head)
     # --------------------------------------------------------------------------------
-    logger.info(model)
     # prepare for (multi-device) GPU training
     device, device_ids = prepare_device(cfg['N_GPU'])
     model = model.to(device)
@@ -55,7 +54,7 @@ if __name__ == "__main__":
     # get function handles of loss and metrics
     criterion = eval(cfg["LOSS"])
     metrics = [eval(met) for met in cfg["METRICS"]]
-    logger.info("train")
     trainer = Trainer(model, criterion, metrics, optimizer, cfg["EPOCH"],
-                      device, dataloader, valid_dataloader, scheduler, save_dir=cfg["SAVE_DIR"])
+                      device, dataloader, valid_dataloader, scheduler,
+                      checkpoint="checkpoint-epoch3.pth", save_dir=cfg["SAVE_DIR"])
     trainer.train()

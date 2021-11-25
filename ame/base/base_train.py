@@ -1,6 +1,7 @@
 import torch
 from abc import abstractmethod
 from loguru import logger
+from ame.utils import *
 
 from ame.meter import MetricTracker
 
@@ -75,9 +76,9 @@ class TrainerBase:
             'state_dict': self.model.state_dict(),
             'optimizer': self.optimizer.state_dict(),
         }
+        ensure_dir(self.save_dir)
         filename = self.save_dir + "/" + f'checkpoint-epoch{epoch}.pth'
         torch.save(state, filename)
-        logger.info(f"Saving checkpoint: {filename} ...")
         if save_best:
             best_path = self.save_dir + "/" + 'model_best.pth'
             torch.save(state, best_path)
@@ -89,7 +90,7 @@ class TrainerBase:
 
         :param resume_path: Checkpoint path to be resumed
         """
-        resume_path = str(resume_path)
+        resume_path = self.save_dir + "/" + str(resume_path)
         logger.info("Loading checkpoint: {} ...".format(resume_path))
         checkpoint = torch.load(resume_path)
         self.start_epoch = checkpoint['epoch'] + 1

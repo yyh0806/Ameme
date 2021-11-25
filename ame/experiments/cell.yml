@@ -4,9 +4,9 @@ DATALOADER:
   TYPE: CellDataLoader
   ARGS:
     data_path: "/media/yangyuhui/DATA/sartorius/sartorius-cell-instance-segmentation"
-    batch_size: 2
-    validation_split: 0.075
-    num_workers: 0
+    batch_size: 4
+    validation_split: 0.1
+    num_workers: 4
 
 MODEL:
   TYPE: segmentation
@@ -29,6 +29,7 @@ MODEL:
       in_channels: *decoder_channels
       out_channels: 1
       activation: sigmoid
+
 #    Classification_head:
 #      in_channels: 3
 #      classes: 3
@@ -41,7 +42,7 @@ OPTIMIZER:
 SCHEDULER:
   TYPE: ReduceLROnPlateau
   ARGS:
-    patience: 5
+    patience: 3
 
 LOSS: BCELoss()
 

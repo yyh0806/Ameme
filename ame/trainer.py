@@ -4,6 +4,8 @@ from ame.base.base_train import TrainerBase
 from ame.utils import format_logs
 from tqdm import tqdm
 
+from loguru import logger
+
 
 class Trainer(TrainerBase):
 
