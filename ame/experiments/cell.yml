@@ -1,8 +1,8 @@
 NAME: Cell
-EPOCH: 8
+EPOCH: 1
 CHECKPOINT: None
 TEST_CHECKPOINT: "/home/yangyuhui/PycharmProjects/Ameme/ame/saved/checkpoint-epoch4.pth"
-OUTPUT: "../submission.csv"
+OUTPUT: "../output/submission.csv"
 DATALOADER:
   TYPE: CellDataLoader
   ARGS:

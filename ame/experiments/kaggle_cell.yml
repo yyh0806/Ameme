@@ -1,12 +1,12 @@
 NAME: Cell
 EPOCH: 8
 CHECKPOINT: None
-TEST_CHECKPOINT: "/home/yangyuhui/PycharmProjects/Ameme/ame/saved/checkpoint-epoch4.pth"
-OUTPUT: "../submission.csv"
+TEST_CHECKPOINT: "checkpoint-epoch4.pth"
+OUTPUT: "../output/submission.csv"
 DATALOADER:
   TYPE: CellDataLoader
   ARGS:
-    data_path: "/media/yangyuhui/DATA/sartorius/sartorius-cell-instance-segmentation"
+    data_path: "../input/sartorius-cell-instance-segmentation"
     batch_size: 4
     validation_split: 0.1
     num_workers: 4
