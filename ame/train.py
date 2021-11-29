@@ -8,10 +8,10 @@ from torch.nn import *
 from ame.utils import *
 from ame.dataset.dataloaders import *
 
-
 from config import *
 
-if __name__ == "__main__":
+
+def train():
     cfg = get_cfg_defaults()
     cfg.merge_from_file("experiments/cell.yml")
     cfg.freeze()
