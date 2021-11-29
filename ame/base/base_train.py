@@ -1,4 +1,6 @@
 import torch
+import sys
+
 from abc import abstractmethod
 from loguru import logger
 from ame.utils import *
@@ -28,22 +30,25 @@ class TrainerBase:
         self.lr_scheduler = lr_scheduler
 
         self.train_metrics = MetricTracker('loss', *[m.__name__ for m in self.metrics])
-        self.valid_metrics = MetricTracker('loss', *[m.__name__ for m in self.metrics])
+        self.valid_metrics = MetricTracker('val_loss', *[m.__name__ for m in self.metrics])
         if checkpoint is not None:
             self._resume_checkpoint(checkpoint)
 
     def train(self):
         logger.info('Starting training...')
-
+        min_loss = sys.maxsize
         for epoch in range(self.start_epoch, self.epochs + 1):
             train_result = self._train_epoch(epoch)
             log = {'epoch': epoch}
             log.update(train_result)
             if self.valid_data_loader:
                 valid_result = self._valid_epoch(epoch)
+                if valid_result['val_loss'] < min_loss:
+                    self._save_checkpoint(epoch, True)
+                    min_loss = valid_result['val_loss']
                 log.update(valid_result)
             if self.lr_scheduler is not None:
-                self.lr_scheduler.step(valid_result['loss'])
+                self.lr_scheduler.step(valid_result['val_loss'])
             self._save_checkpoint(epoch)
 
     @abstractmethod
@@ -77,12 +82,13 @@ class TrainerBase:
             'optimizer': self.optimizer.state_dict(),
         }
         ensure_dir(self.save_dir)
-        filename = self.save_dir + "/" + f'checkpoint-epoch{epoch}.pth'
-        torch.save(state, filename)
         if save_best:
             best_path = self.save_dir + "/" + 'model_best.pth'
             torch.save(state, best_path)
             logger.info(f'Saving current best: {best_path}')
+        else:
+            filename = self.save_dir + "/" + f'checkpoint-epoch{epoch}.pth'
+            torch.save(state, filename)
 
     def _resume_checkpoint(self, resume_path):
         """

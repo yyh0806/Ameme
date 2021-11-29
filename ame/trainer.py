@@ -45,7 +45,7 @@ class Trainer(TrainerBase):
                     output = self.model(data)
                     loss = self._calculate_loss(output, target)
 
-                    self.valid_metrics.update('loss', loss.item())
+                    self.valid_metrics.update('val_loss', loss.item())
                     for met in self.metrics:
                         self.valid_metrics.update(met.__name__, met(output, target))
 

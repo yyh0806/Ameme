@@ -1,5 +1,5 @@
 NAME: Cell
-EPOCH: 1
+EPOCH: 8
 CHECKPOINT: None
 TEST_CHECKPOINT: "/home/yangyuhui/PycharmProjects/Ameme/ame/saved/checkpoint-epoch4.pth"
 OUTPUT: "../output/submission.csv"
