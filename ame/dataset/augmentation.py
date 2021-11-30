@@ -30,8 +30,8 @@ class AugmentationFactoryBase(abc.ABC):
 class CellTransforms(AugmentationFactoryBase):
     def build_train(self):
         train_transform = Compose([
-            RandomResizedCrop(width=448, height=448, scale=(0.08, 1.0), ratio=(0.75, 1.3333333333333333)),
-            Transpose(p=0.5),
+            Resize(448, 448, p=1.0),
+            RandomBrightnessContrast(0.9, 1.1),
             HorizontalFlip(p=0.5),
             VerticalFlip(p=0.5),
             Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225], max_pixel_value=255.0, p=1.0),

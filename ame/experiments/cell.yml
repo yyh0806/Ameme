@@ -1,7 +1,7 @@
 NAME: Cell
-EPOCH: 8
+EPOCH: 32
 CHECKPOINT: None
-TEST_CHECKPOINT: "/home/yangyuhui/PycharmProjects/Ameme/ame/saved/checkpoint-epoch4.pth"
+TEST_CHECKPOINT: "/home/yangyuhui/PycharmProjects/Ameme/ame/saved/model_best.pth"
 OUTPUT: "../output/submission.csv"
 DATALOADER:
   TYPE: CellDataLoader
@@ -15,13 +15,21 @@ MODEL:
   TYPE: segmentation
   ARGS:
     Encoder:
-      name: ResNetEncoder
+      name: SENetEncoder
       params:
         depth: 5
         out_channels: &out_channels
-          (3, 64, 64, 128, 256, 512)
-        block: BasicBlock
+          (3, 64, 256, 512, 1024, 2048)
+        block: SEResNetBottleneck
         layers: [3, 4, 6, 3]
+        downsample_kernel_size: 1
+        downsample_padding: 0
+        dropout_p: None
+        groups: 1
+        inplanes: 64
+        input_3x3: False
+        num_classes: 1
+        reduction: 16
     Decoder:
       name: UnetDecoder
       params:
