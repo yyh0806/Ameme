@@ -90,7 +90,6 @@ class FPNDecoder(nn.Module):
 
         encoder_channels = encoder_channels[::-1]
         encoder_channels = encoder_channels[:encoder_depth + 1]
-        logger.info(encoder_channels)
         self.p5 = nn.Conv2d(encoder_channels[0], pyramid_channels, kernel_size=(1, 1))
         self.p4 = FPNBlock(pyramid_channels, encoder_channels[1])
         self.p3 = FPNBlock(pyramid_channels, encoder_channels[2])
