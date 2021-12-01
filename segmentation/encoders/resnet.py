@@ -1,6 +1,7 @@
 import torch.nn as nn
 
 from torchvision.models.resnet import ResNet
+from torchvision.models.resnet import BasicBlock, Bottleneck
 
 from ._base import EncoderMixin
 
@@ -42,4 +43,13 @@ class ResNetEncoder(ResNet, EncoderMixin):
         state_dict.pop("fc.weight", None)
         super().load_state_dict(state_dict, **kwargs)
 
-
+    # -------- resnet50 --------
+    # Encoder:
+    #   name: ResNetEncoder
+    #   params:
+    #     depth: 5
+    #     out_channels: &out_channels
+    #       (3, 64, 256, 512, 1024, 2048)
+    #     block: Bottleneck
+    #     layers: [3, 4, 6, 3]
+    # --------------------------

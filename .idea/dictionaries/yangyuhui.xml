@@ -3,6 +3,7 @@
     <words>
       <w>ameme</w>
       <w>batchnorm</w>
+      <w>bilinear</w>
       <w>dataloader</w>
       <w>datapath</w>
       <w>dirname</w>
@@ -25,6 +26,8 @@
       <w>segmetation</w>
       <w>thres</w>
       <w>unet</w>
+      <w>upsample</w>
+      <w>upsamples</w>
       <w>upsampling</w>
       <w>visdom</w>
       <w>xfold</w>
