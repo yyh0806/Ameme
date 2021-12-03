@@ -9,6 +9,8 @@
       <w>dirname</w>
       <w>efficientnet</w>
       <w>ious</w>
+      <w>jaccard</w>
+      <w>logits</w>
       <w>logprobs</w>
       <w>maskimg</w>
       <w>nfold</w>

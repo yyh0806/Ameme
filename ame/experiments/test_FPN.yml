@@ -23,19 +23,15 @@ MODEL:
         block: Bottleneck
         layers: [3, 4, 6, 3]
     Decoder:
-      name: FPNDecoder
+      name: UnetDecoder
       params:
         encoder_channels: *out_channels
-        encoder_depth: 5
-        pyramid_channels: 256
-        segmentation_channels: 128
-        dropout: 0.2
-        merge_policy: 1
+        decoder_channels: &decoder_channels
+          (256, 128, 64, 32, 16)
     Segmentation_head:
-      in_channels: 128
+      in_channels: *decoder_channels
       out_channels: 1
       activation: sigmoid
-      upsampling: 4
 
 OPTIMIZER:
   TYPE: Adam
@@ -47,7 +43,7 @@ SCHEDULER:
   ARGS:
     patience: 3
 
-LOSS: BCELoss()
+LOSS: JaccardLoss()
 
 METRICS:
   - IOU_score

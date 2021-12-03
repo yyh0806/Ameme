@@ -37,6 +37,9 @@ def iou(pr, gt, eps=1e-7, threshold=None, ignore_channels=None):
     return (intersection + eps) / union
 
 
+jaccard = iou
+
+
 def precision_at(threshold, iou):
     """
     Computes the precision at a given threshold.

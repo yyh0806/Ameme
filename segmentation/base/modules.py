@@ -91,6 +91,8 @@ class Activation(nn.Module):
             self.activation = nn.LogSoftmax(**params)
         elif name == 'tanh':
             self.activation = nn.Tanh()
+        elif name == 'relu':
+            self.activation = nn.ReLU()
         elif name == 'argmax':
             self.activation = ArgMax(**params)
         elif name == 'argmax2d':
@@ -98,7 +100,7 @@ class Activation(nn.Module):
         elif callable(name):
             self.activation = name(**params)
         else:
-            raise ValueError('Activation should be callable/sigmoid/softmax/logsoftmax/tanh/None; got {}'.format(name))
+            raise ValueError('Activation should be callable/sigmoid/softmax/logsoftmax/tanh/relu/None; got {}'.format(name))
 
     def forward(self, x):
         return self.activation(x)
