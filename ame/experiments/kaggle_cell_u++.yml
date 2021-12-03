@@ -1,0 +1,49 @@
+NAME: Cell
+EPOCH: 50
+CHECKPOINT: None
+TEST_CHECKPOINT: "/home/yangyuhui/PycharmProjects/Ameme/ame/saved/model_best.pth"
+OUTPUT: "../output/submission.csv"
+DATALOADER:
+  TYPE: CellDataLoader
+  ARGS:
+    data_path: "/media/yangyuhui/DATA/sartorius/sartorius-cell-instance-segmentation"
+    batch_size: 4
+    validation_split: 0.1
+    num_workers: 4
+
+MODEL:
+  TYPE: segmentation
+  ARGS:
+    Encoder:
+      name: ResNetEncoder
+      params:
+        depth: 5
+        out_channels: &out_channels
+          (3, 64, 256, 512, 1024, 2048)
+        block: Bottleneck
+        layers: [3, 4, 6, 3]
+    Decoder:
+      name: UnetPlusPlusDecoder
+      params:
+        encoder_channels: *out_channels
+        decoder_channels: &decoder_channels
+          (256, 128, 64, 32, 16)
+    Segmentation_head:
+      in_channels: *decoder_channels
+      out_channels: 1
+      activation: sigmoid
+
+OPTIMIZER:
+  TYPE: Adam
+  ARGS:
+    lr: 0.0005
+
+SCHEDULER:
+  TYPE: ReduceLROnPlateau
+  ARGS:
+    patience: 3
+
+LOSS: JaccardLoss()
+
+METRICS:
+  - IOU_score
