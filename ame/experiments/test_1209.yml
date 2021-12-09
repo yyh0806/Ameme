@@ -6,8 +6,8 @@ OUTPUT: "../output/submission.csv"
 DATALOADER:
   TYPE: CellDataLoader
   ARGS:
-    data_path: "../input/sartorius-cell-instance-segmentation"
-    # data_path: "/media/yangyuhui/DATA/sartorius/sartorius-cell-instance-segmentation"
+    # data_path: "../input/sartorius-cell-instance-segmentation"
+    data_path: "/media/yangyuhui/DATA/sartorius/sartorius-cell-instance-segmentation"
     batch_size: 4
     validation_split: 0.1
     num_workers: 4
@@ -24,7 +24,7 @@ MODEL:
         block: Bottleneck
         layers: [3, 4, 6, 3]
     Decoder:
-      name: UnetPlusPlusDecoder
+      name: UnetDecoder
       params:
         encoder_channels: *out_channels
         decoder_channels: &decoder_channels

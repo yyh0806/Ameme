@@ -35,7 +35,7 @@ class ResNetEncoder(ResNet, EncoderMixin):
         for i in range(self._depth + 1):
             x = stages[i](x)
             features.append(x)
-
+            logger.info(x.shape)
         return features
 
     def load_state_dict(self, state_dict, **kwargs):

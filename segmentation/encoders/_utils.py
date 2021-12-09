@@ -57,3 +57,5 @@ def replace_strides_with_dilation(module, dilation_rate):
             # Kostyl for EfficientNet
             if hasattr(mod, "static_padding"):
                 mod.static_padding = nn.Identity()
+
+

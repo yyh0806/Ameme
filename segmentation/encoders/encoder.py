@@ -1,5 +1,6 @@
 from torchvision.models.resnet import BasicBlock, Bottleneck
 from segmentation.encoders.resnet import ResNetEncoder
+from segmentation.encoders.unet import UNetEncoder
 
 
 def Encoder(name, in_channels=3, weights=None, output_stride=32, **params):

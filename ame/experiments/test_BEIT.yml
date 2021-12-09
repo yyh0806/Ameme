@@ -6,8 +6,8 @@ OUTPUT: "../output/submission.csv"
 DATALOADER:
   TYPE: CellDataLoader
   ARGS:
-    data_path: "../input/sartorius-cell-instance-segmentation"
-    # data_path: "/media/yangyuhui/DATA/sartorius/sartorius-cell-instance-segmentation"
+    # data_path: "../input/sartorius-cell-instance-segmentation"
+    data_path: "/media/yangyuhui/DATA/sartorius/sartorius-cell-instance-segmentation"
     batch_size: 4
     validation_split: 0.1
     num_workers: 4
@@ -16,17 +16,26 @@ MODEL:
   TYPE: segmentation
   ARGS:
     Encoder:
-      name: ResNetEncoder
+      name: BEiT
       params:
-        depth: 5
-        out_channels: &out_channels
-          (3, 64, 256, 512, 1024, 2048)
-        block: Bottleneck
-        layers: [3, 4, 6, 3]
+        img_size: 512
+        patch_size: 16
+        in_channels: 3
+        num_classes: 1
+        embed_dim: 1024
+        depth: 24
+        num_heads: 16
+        mlp_ratio: 4
+        qkv_bias: True
+        use_abs_pos_emb: False
+        use_rel_pos_bias: True
+        init_values: 1e-6
+        drop_path_rate: 0.2
+        out_indices: [7, 11, 15, 23]
     Decoder:
-      name: UnetPlusPlusDecoder
+      name: UnetDecoder
       params:
-        encoder_channels: *out_channels
+        encoder_channels: (3, 64, 256, 512, 1024, 2048)
         decoder_channels: &decoder_channels
           (256, 128, 64, 32, 16)
     Segmentation_head:

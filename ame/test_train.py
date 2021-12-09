@@ -13,7 +13,7 @@ from config import *
 
 if __name__ == "__main__":
     cfg = get_cfg_defaults()
-    cfg.merge_from_file("experiments/test_FPN.yml")
+    cfg.merge_from_file("experiments/test_1208_UNet.yml")
     cfg.freeze()
     logger.info(cfg)
     # seed
@@ -46,7 +46,6 @@ if __name__ == "__main__":
     # prepare for (multi-device) GPU training
     device, device_ids = prepare_device(cfg['N_GPU'])
     model = model.to(device)
-    logger.info(model)
     if len(device_ids) > 1:
         model = torch.nn.DataParallel(model, device_ids=device_ids)
     # optimizer and scheduler
