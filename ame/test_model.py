@@ -11,6 +11,8 @@ from ame.losses import *
 
 from config import *
 
+from torchsummary import summary
+
 if __name__ == "__main__":
     cfg = get_cfg_defaults()
     cfg.merge_from_file("experiments/test_1214.yml")
@@ -42,19 +44,4 @@ if __name__ == "__main__":
         assert decoder is not None
         assert segmentation_head is not None
         model = SegModel(encoder, decoder, segmentation_head, classification_head)
-    # --------------------------------------------------------------------------------
-    # prepare for (multi-device) GPU training
-    device, device_ids = prepare_device(cfg['N_GPU'])
-    model = model.to(device)
-    if len(device_ids) > 1:
-        model = torch.nn.DataParallel(model, device_ids=device_ids)
-    # optimizer and scheduler
-    optimizer = eval(cfg["OPTIMIZER"]["TYPE"])(**cfg["OPTIMIZER"]["ARGS"], params=model.parameters())
-    scheduler = eval(cfg["SCHEDULER"]["TYPE"])(**cfg["SCHEDULER"]["ARGS"], optimizer=optimizer)
-    # get function handles of loss and metrics
-    criterion = eval(cfg["LOSS"])
-    metrics = [eval(met) for met in cfg["METRICS"]]
-    trainer = Trainer(model, criterion, metrics, optimizer, cfg["EPOCH"],
-                      device, dataloader, valid_dataloader, scheduler,
-                      checkpoint=cfg["CHECKPOINT"], save_dir=cfg["SAVE_DIR"])
-    trainer.train()
+        summary(model.cuda(), input_size=(3, 320, 320))

@@ -70,18 +70,18 @@ class OutConv(nn.Module):
 
 
 class UNet(nn.Module):
-    def __init__(self,  out_channels=(3, 64, 128, 256, 512, 1024), n_class=1):
+    def __init__(self, out_channels=(3, 64, 128, 256, 512, 1024), n_class=1):
         super(UNet, self).__init__()
-        self.inc = DoubleConv(out_channels[0], out_channels[1])   # 64x512x512
-        self.down1 = Down(out_channels[1], out_channels[2])       # 128x256x256
-        self.down2 = Down(out_channels[2], out_channels[3])       # 256x128x128
-        self.down3 = Down(out_channels[3], out_channels[4])       # 512x64x64
-        self.down4 = Down(out_channels[4], out_channels[5])       # 1024x32x32
-        self.up1 = Up(out_channels[5], out_channels[4])           # 512x64x64
-        self.up2 = Up(out_channels[4], out_channels[3])           # 256x128x128
-        self.up3 = Up(out_channels[3], out_channels[2])           # 128x256x256
-        self.up4 = Up(out_channels[2], out_channels[1])           # 64x512x512
-        self.outc = OutConv(out_channels[1], n_class)             # 1x512x512
+        self.inc = DoubleConv(out_channels[0], out_channels[1])  # 64x512x512
+        self.down1 = Down(out_channels[1], out_channels[2])      # 128x256x256
+        self.down2 = Down(out_channels[2], out_channels[3])      # 256x128x128
+        self.down3 = Down(out_channels[3], out_channels[4])      # 512x64x64
+        self.down4 = Down(out_channels[4], out_channels[5])      # 1024x32x32
+        self.up1 = Up(out_channels[5], out_channels[4])          # 512x64x64
+        self.up2 = Up(out_channels[4], out_channels[3])          # 256x128x128
+        self.up3 = Up(out_channels[3], out_channels[2])          # 128x256x256
+        self.up4 = Up(out_channels[2], out_channels[1])          # 64x512x512
+        self.outc = OutConv(out_channels[1], n_class)            # 1x512x512
 
     def forward(self, x):
         x1 = self.inc(x)
@@ -106,12 +106,12 @@ class UNetEncoder(UNet, EncoderMixin):
 
     def get_stages(self):
         return [
-            nn.Identity(),
-            self.inc,
-            self.down1,
-            self.down2,
-            self.down3,
-            self.down4,
+            nn.Identity(),             # input
+            self.inc,                  # h1
+            self.down1,                # h2
+            self.down2,                # h3
+            self.down3,                # h4
+            self.down4,                # h5
         ]
 
     def forward(self, x):

@@ -64,7 +64,7 @@ class CenterBlock(nn.Sequential):
         super().__init__(conv1, conv2)
 
 
-class UnetDecoder(nn.Module):
+class UNetDecoder(nn.Module):
     def __init__(
             self,
             encoder_channels,
