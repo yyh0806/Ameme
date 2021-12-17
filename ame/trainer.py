@@ -32,6 +32,7 @@ class Trainer(TrainerBase):
 
                 s = format_logs(self.train_metrics.result())
                 iterator.set_postfix_str(s)
+                iterator.set_description("EPOCH_{0}".format(epoch))
 
             return self.train_metrics.result()
 
