@@ -72,7 +72,7 @@ class TrainerBase:
 
         :param epoch: current epoch number
         :param log: logging information of the epoch
-        :param save_best: if True, rename the saved checkpoint to 'model_best.pth'
+        :param save_best: if True, rename the saved checkpoint to 'model_best12.pth'
         """
         arch = type(self.model).__name__
         state = {
