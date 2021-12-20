@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="ameme",
-    version="0.0.2",
+    version="0.0.3",
     author="yangyuhui",
     author_email="535756548@qq.com",
     description="My Framework",

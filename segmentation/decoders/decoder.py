@@ -1,7 +1,6 @@
 from segmentation.decoders.unet import UNetDecoder
 from segmentation.decoders.fpn import FPNDecoder
 from segmentation.decoders.unetplusplus import UNetPlusPlusDecoder
-from segmentation.decoders.unetplusplusplus import UNetPlusPlusPlusDecoder
 
 
 def Decoder(name, **params):

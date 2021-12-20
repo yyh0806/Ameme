@@ -30,12 +30,10 @@ class ResNetEncoder(ResNet, EncoderMixin):
 
     def forward(self, x):
         stages = self.get_stages()
-
         features = []
         for i in range(self._depth + 1):
             x = stages[i](x)
             features.append(x)
-            logger.info(x.shape)
         return features
 
     def load_state_dict(self, state_dict, **kwargs):
@@ -52,4 +50,26 @@ class ResNetEncoder(ResNet, EncoderMixin):
     #       (3, 64, 256, 512, 1024, 2048)
     #     block: Bottleneck
     #     layers: [3, 4, 6, 3]
+    # --------------------------
+
+    # -------- resnet101 -------
+    # Encoder:
+    #   name: ResNetEncoder
+    #   params:
+    #     depth: 5
+    #     out_channels: &out_channels
+    #       (3, 64, 256, 512, 1024, 2048)
+    #     block: Bottleneck
+    #     layers: [3, 4, 23, 3]
+    # --------------------------
+
+    # -------- resnet152 -------
+    # Encoder:
+    #   name: ResNetEncoder
+    #   params:
+    #     depth: 5
+    #     out_channels: &out_channels
+    #       (3, 64, 256, 512, 1024, 2048)
+    #     block: Bottleneck
+    #     layers: [3, 8, 36, 3]
     # --------------------------

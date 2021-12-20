@@ -13,7 +13,7 @@ from config import *
 
 if __name__ == "__main__":
     cfg = get_cfg_defaults()
-    cfg.merge_from_file("experiments/test_1214.yml")
+    cfg.merge_from_file("experiments/_test.yml")
     cfg.freeze()
     logger.info(cfg)
     # seed

@@ -6,6 +6,8 @@ from ..base import modules as md
 
 from loguru import logger
 
+# TODO
+
 
 class CBR(nn.Module):
     def __init__(self,
@@ -96,14 +98,10 @@ class UNetPlusPlusPlusDecoder(nn.Module):
         encoder_channels = encoder_channels[1:]  # (64, 128, 256, 512, 1024)
         self.cat_channels = 64
         self.upper_channels = self.cat_channels * 5
-        self.decoderBlock4 = DecoderBlock([('down', 8), ('down', 4), ('down', 2), ('cbr', 0), ('up', 2)], [],
-                                          encoder_channels)
-        self.decoderBlock3 = DecoderBlock([('down', 4), ('down', 2), ('cbr', 0), ('up', 2), ('up', 4)], [3],
-                                          encoder_channels)
-        self.decoderBlock2 = DecoderBlock([('down', 2), ('cbr', 0), ('up', 2), ('up', 4), ('up', 8)], [2, 3],
-                                          encoder_channels)
-        self.decoderBlock1 = DecoderBlock([('cbr', 0), ('up', 2), ('up', 4), ('up', 8), ('up', 16)], [1, 2, 3],
-                                          encoder_channels)
+        self.decoderBlock4 = DecoderBlock([('down', 8), ('down', 4), ('down', 2), ('cbr', 0), ('up', 2)], [], encoder_channels)
+        self.decoderBlock3 = DecoderBlock([('down', 4), ('down', 2), ('cbr', 0), ('up', 2), ('up', 4)], [3], encoder_channels)
+        self.decoderBlock2 = DecoderBlock([('down', 2), ('cbr', 0), ('up', 2), ('up', 4), ('up', 8)], [2, 3], encoder_channels)
+        self.decoderBlock1 = DecoderBlock([('cbr', 0), ('up', 2), ('up', 4), ('up', 8), ('up', 16)], [1, 2, 3], encoder_channels)
 
     def forward(self, *features):
         h1, h2, h3, h4, f5 = features[-5:]
@@ -112,3 +110,46 @@ class UNetPlusPlusPlusDecoder(nn.Module):
         f2 = self.decoderBlock2(h1, h2, f3, f4, f5)
         f1 = self.decoderBlock1(h1, f2, f3, f4, f5)
         return f1
+
+
+# class UNetPPPPDecoder(nn.Module):
+#     def __init__(
+#             self,
+#             encoder_channels,
+#             decoder_channels,
+#             n_blocks=5
+#     ):
+#         super().__init__()
+#         self.encoder_channels = encoder_channels[1:]
+#         self.decoder_channels = decoder_channels
+#         self.cat_channels = 64
+#         if n_blocks != len(decoder_channels):
+#             raise ValueError(
+#                 "Model depth is {}, but you provide `decoder_channels` for {} blocks.".format(
+#                     n_blocks, len(decoder_channels)
+#                 )
+#             )
+#
+#     def forward(self, *features):
+#         h1, h2, h3, h4, f5 = features[-5:]
+#         h1_1 = BasicBlock(in_channels=h1.shape[1], out_channels=self.cat_channels)(h1, 'down', 8)
+#         h1_2 = BasicBlock(in_channels=h2.shape[1], out_channels=self.cat_channels)(h2, 'down', 4)
+#         h1_3 = BasicBlock(in_channels=h3.shape[1], out_channels=self.cat_channels)(h3, 'down', 2)
+#         h1_4 = BasicBlock(in_channels=h4.shape[1], out_channels=self.cat_channels)(h4, 'cbr', 0)
+#         f1 = torch.cat([h1_1, h1_2, h1_3, h1_4], dim=1)
+#         h2_1 = BasicBlock(in_channels=h1.shape[1], out_channels=self.cat_channels)(h1, 'down', 4)
+#         h2_2 = BasicBlock(in_channels=h2.shape[1], out_channels=self.cat_channels)(h2, 'down', 2)
+#         h2_3 = BasicBlock(in_channels=h3.shape[1], out_channels=self.cat_channels)(h3, 'cbr', 0)
+#         f2 = torch.cat([h2_1, h2_2, h2_3], dim=1)
+#         h3_1 = BasicBlock(in_channels=h1.shape[1], out_channels=self.cat_channels)(h1, 'down', 2)
+#         h3_2 = BasicBlock(in_channels=h2.shape[1], out_channels=self.cat_channels)(h2, 'cbr', 0)
+#         f3 = torch.cat([h3_1, h3_2], dim=1)
+#         f4 = BasicBlock(in_channels=h1.shape[1], out_channels=self.cat_channels)(h1, 'cbr', 0)
+#
+#         u1 = nn.Upsample(scale_factor=8)(f1)
+#         u2 = nn.Upsample(scale_factor=4)(f2)
+#         u3 = nn.Upsample(scale_factor=2)(f3)
+#
+#         fea = torch.cat([u1, u2, u3, f4], dim=1)
+#
+#         return fea

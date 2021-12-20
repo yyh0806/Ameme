@@ -15,7 +15,7 @@ from torchsummary import summary
 
 if __name__ == "__main__":
     cfg = get_cfg_defaults()
-    cfg.merge_from_file("experiments/test_1214.yml")
+    cfg.merge_from_file("experiments/_test.yml")
     cfg.freeze()
     logger.info(cfg)
     # seed
@@ -44,4 +44,4 @@ if __name__ == "__main__":
         assert decoder is not None
         assert segmentation_head is not None
         model = SegModel(encoder, decoder, segmentation_head, classification_head)
-        summary(model.cuda(), input_size=(3, 320, 320))
+        summary(model.cuda(), input_size=(3, 512, 512))

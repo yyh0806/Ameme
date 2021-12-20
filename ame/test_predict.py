@@ -58,7 +58,7 @@ def check_is_run_length(mask_rle):
 
 if __name__ == "__main__":
     cfg = get_cfg_defaults()
-    cfg.merge_from_file("experiments/cell.yml")
+    cfg.merge_from_file("experiments/_test.yml")
     cfg.freeze()
     logger.info(cfg)
     # seed
