@@ -48,7 +48,8 @@ class TrainerBase:
                     min_loss = valid_result['val_loss']
                 log.update(valid_result)
             if self.lr_scheduler is not None:
-                self.lr_scheduler.step(valid_result['val_loss'])
+                # self.lr_scheduler.step(valid_result['val_loss'])
+                self.lr_scheduler.step()
 
     @abstractmethod
     def _train_epoch(self, epoch: int) -> dict:

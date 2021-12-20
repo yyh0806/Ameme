@@ -6,9 +6,8 @@ from ..base import modules as md
 
 from loguru import logger
 
+
 # TODO
-
-
 class CBR(nn.Module):
     def __init__(self,
                  in_channels,
