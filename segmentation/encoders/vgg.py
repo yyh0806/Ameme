@@ -48,12 +48,42 @@ class VGGEncoder(VGG, EncoderMixin):
                 state_dict.pop(k, None)
         super().load_state_dict(state_dict, **kwargs)
 
-    # -------- vgg11 --------
+    # --------- vgg11 ----------
     # Encoder:
     #   name: VGGEncoder
     #   params:
     #     out_channels: &out_channels
     #       (64, 128, 256, 512, 512, 512)
     #     config: [64, 'M', 128, 'M', 256, 256, 'M', 512, 512, 'M', 512, 512, 'M']
+    #     batch_norm: False
+    # --------------------------
+
+    # --------- vgg13 ----------
+    # Encoder:
+    #   name: VGGEncoder
+    #   params:
+    #     out_channels: &out_channels
+    #       (64, 128, 256, 512, 512, 512)
+    #     config: [64, 64, 'M', 128, 128, 'M', 256, 256, 'M', 512, 512, 'M', 512, 512, 'M']
+    #     batch_norm: False
+    # --------------------------
+
+    # --------- vgg16 ----------
+    # Encoder:
+    #   name: VGGEncoder
+    #   params:
+    #     out_channels: &out_channels
+    #       (64, 128, 256, 512, 512, 512)
+    #     config: [64, 64, 'M', 128, 128, 'M', 256, 256, 256, 'M', 512, 512, 512, 'M', 512, 512, 512, 'M'],
+    #     batch_norm: False
+    # --------------------------
+
+    # --------- vgg19 ----------
+    # Encoder:
+    #   name: VGGEncoder
+    #   params:
+    #     out_channels: &out_channels
+    #       (64, 128, 256, 512, 512, 512)
+    #     config: [64, 64, 'M', 128, 128, 'M', 256, 256, 256, 256, 'M', 512, 512, 512, 512, 'M', 512, 512, 512, 512, 'M']
     #     batch_norm: False
     # --------------------------
